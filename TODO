@@ -1,0 +1,5 @@
+- Plan and implement auth middleware for MCP tools (FastMCP Middleware with on_call_tool hook, Bearer token verification, ToolError for unauthorized access)
+- Plan role-based permission system (read-only vs admin tools) — potentially Strategy pattern for different auth levels or separate tool sets
+- Add more tools: get_project, get_work_package, create_work_package
+- Implement Strategy pattern for auth methods (API key, OAuth, BasicAuth)
+- Add tests/__init__.py missing from test subdirectories if needed

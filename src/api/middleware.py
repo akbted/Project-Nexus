@@ -1,4 +1,5 @@
 from fastmcp.server.middleware import Middleware, MiddlewareContext
+from fastmcp.server.dependencies import get_http_request
 from fastmcp.exceptions import ToolError
 
 
@@ -10,7 +11,13 @@ class AuthMiddleware(Middleware):
 
     async def on_call_tool(self, context: MiddlewareContext, call_next):
         # Get the API key from the request context
-        api_key = context.fastmcp_context.get_state("api_key")
+        try:
+            request = get_http_request()
+            api_key = request.headers.get("x-api-key")
+        except RuntimeError:
+            # stdio mode — skip auth
+            return await call_next(context)
+
 
         if not api_key:
             raise ToolError("Access denied: No API key provided")
