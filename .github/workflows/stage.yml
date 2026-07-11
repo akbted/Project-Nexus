@@ -1,0 +1,28 @@
+name: Stage - Build Docker
+
+on:
+  push:
+    branches: [stage]
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build Docker image
+        run: docker build -t openproject-mcp:stage .
+      
+      - name: Test Docker image
+        run: |
+          docker run -d --name test-server \
+            -e OPENPROJECT_TOKEN=test-token \
+            -e OPENPROJECT_APIROOT=http://localhost:8080 \
+            -e MCP_SERVER_API=test-api-key \
+            -e LOGFIRE_TOKEN=test-logfire-token \
+            -p 8000:8000 \
+            openproject-mcp:stage
+          sleep 5
+          curl -f http://localhost:8000/mcp || exit 1
+          docker stop test-server
