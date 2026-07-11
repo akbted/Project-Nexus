@@ -16,6 +16,7 @@ class PROJECTSETTINGS(BaseSettings):
     app_name: str = "OpenProject MCP"
     OPENPROJECT_TOKEN: str
     OPENPROJECT_APIROOT: str
+    MCP_SERVER_API: str
 
 _instance = None
 

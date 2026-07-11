@@ -19,7 +19,8 @@ async def lifespan(server: FastMCP):
 mcp = FastMCP("OpenProject", lifespan=lifespan)
 
 # Add auth middleware
-mcp.add_middleware(AuthMiddleware(valid_api_keys=["my-secret-key-123"]))
+settings = get_settings()
+mcp.add_middleware(AuthMiddleware(valid_api_keys=[settings.MCP_SERVER_API]))
 
 
 @mcp.tool()
