@@ -25,9 +25,8 @@ def get_settings():
         _instance = PROJECTSETTINGS()
     return _instance
 
-setting = get_settings()
 
 if __name__ == "__main__":
-    
+    setting = get_settings()    
     print(setting.OPENPROJECT_TOKEN)
     print(setting.OPENPROJECT_APIROOT)
