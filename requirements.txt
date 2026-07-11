@@ -1,0 +1,8 @@
+pydantic
+pydantic-settings
+httpx
+fastmcp
+pytest
+pytest-asyncio
+logfire
+logfire[httpx]
