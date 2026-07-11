@@ -29,7 +29,7 @@ async def list_projects(ctx):
 
 @mcp.tool()
 async def list_workpackages(ctx, project_id):
-    """"List work packages for a project"""
+    """List work packages for a project"""
     if not project_id:
         return "Missing Project_ID"
     try:
