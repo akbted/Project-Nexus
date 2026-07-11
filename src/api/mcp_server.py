@@ -1,4 +1,5 @@
 from fastmcp import FastMCP
+from src.api.middleware import AuthMiddleware
 from contextlib import asynccontextmanager
 from src.factories import ClientCreator
 from src.config import get_settings
@@ -16,6 +17,10 @@ async def lifespan(server: FastMCP):
     await client.close()
 
 mcp = FastMCP("OpenProject", lifespan=lifespan)
+
+# Add auth middleware
+mcp.add_middleware(AuthMiddleware(valid_api_keys=["my-secret-key-123"]))
+
 
 @mcp.tool()
 async def list_projects(ctx):
