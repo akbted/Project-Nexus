@@ -23,6 +23,8 @@ jobs:
             -e LOGFIRE_TOKEN=test-logfire-token \
             -p 8000:8000 \
             openproject-mcp:stage
-          sleep 5
-          curl -f http://localhost:8000/mcp || exit 1
+          sleep 8
+          curl -f -X POST http://localhost:8000/mcp \
+            -H "Content-Type: application/json" \
+            -d '{"jsonrpc": "2.0", "method": "initialize", "params": {"protocolVersion": "2024-11-05", "capabilities": {}, "clientInfo": {"name": "test", "version": "1.0"}}, "id": 1}' || exit 1
           docker stop test-server
