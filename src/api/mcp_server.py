@@ -55,5 +55,6 @@ async def list_workpackages(ctx, project_id):
 
 if __name__ == "__main__":
     # mcp.run()
-    mcp.run(transport="http")
+    # mcp.run(transport="http")
+    mcp.run(transport="http", host="0.0.0.0")
 
