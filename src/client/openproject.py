@@ -2,7 +2,6 @@ import httpx
 from typing import List
 from src.config.settings import PROJECTSETTINGS
 from src.client.base import BaseOpenProjectClient
-from src.schema import Project
 
 class OpenProjectClient(BaseOpenProjectClient):
     def __init__(self, settings: PROJECTSETTINGS):

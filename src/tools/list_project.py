@@ -3,7 +3,7 @@ from typing import List
 from src.client.openproject import OpenProjectClient
 
 async def list_openproject_projects(client: OpenProjectClient) -> List[Project]:
-    client = client.get_client()
+    http = client.get_client()
     response = await client.get("/api/v3/projects")
     response.raise_for_status()
     data = response.json()

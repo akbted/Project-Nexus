@@ -15,9 +15,7 @@ async def lifespan(server: FastMCP):
 
     await client.close()
 
-mcp = FastMCP("OpenProject")
-client_settings = get_settings()
-openproject_client = ClientCreator.create(client_settings)
+mcp = FastMCP("OpenProject", lifespan=lifespan)
 
 @mcp.tool()
 async def list_projects(ctx):
@@ -31,7 +29,7 @@ async def list_projects(ctx):
 
 @mcp.tool()
 async def list_workpackages(ctx, project_id):
-    """List all the projects in OpenProject"""
+    """"List work packages for a project"""
     if not project_id:
         return "Missing Project_ID"
     try:
