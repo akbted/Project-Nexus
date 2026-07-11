@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 from src.factories import ClientCreator
 from src.config import get_settings
 from src.tools import list_openproject_projects, list_project_workpackages
+import logfire
 
 @asynccontextmanager
 async def lifespan(server: FastMCP):
@@ -21,6 +22,12 @@ mcp = FastMCP("OpenProject", lifespan=lifespan)
 # Add auth middleware
 settings = get_settings()
 mcp.add_middleware(AuthMiddleware(valid_api_keys=[settings.MCP_SERVER_API]))
+
+logfire.configure(
+    service_name="openproject-mcp",
+    token=settings.LOGFIRE_TOKEN,
+)
+logfire.instrument_mcp() # Monitors all mcp tool calls (who called, what tool, duration, result)
 
 
 @mcp.tool()

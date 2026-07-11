@@ -17,6 +17,7 @@ class PROJECTSETTINGS(BaseSettings):
     OPENPROJECT_TOKEN: str
     OPENPROJECT_APIROOT: str
     MCP_SERVER_API: str
+    LOGFIRE_TOKEN: str
 
 _instance = None
 

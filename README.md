@@ -8,6 +8,8 @@ This project follows a **Thin Client + Separate Tools** architecture with clear 
 
 ```
 AI Agent → MCP Client → FastMCP Server → Tool Functions → OpenProject API
+                                        ↓
+                                   Logfire (traces, metrics)
 ```
 
 ### Design Patterns
@@ -77,6 +79,9 @@ OPENPROJECT_APIROOT=http://localhost:8080
 
 # MCP Server Authentication
 MCP_SERVER_API=your_api_key_here
+
+# Logfire Observability
+LOGFIRE_TOKEN=your_logfire_write_token_here
 ```
 
 ### 3. Get OpenProject API Token
@@ -132,6 +137,30 @@ The server supports API key authentication via HTTP headers:
 
 In **stdio mode** (used by Claude Desktop), authentication is skipped automatically.
 
+## Observability (Logfire)
+
+This server uses [Pydantic Logfire](https://logfire.pydantic.dev) for observability, providing:
+
+- **MCP tool call tracing** — who called which tool, duration, result
+- **HTTP request monitoring** — all OpenProject API calls tracked
+- **Error tracking** — full stack traces for debugging
+- **Real-time dashboard** — visualize traces at https://logfire.pydantic.dev
+
+### Setup
+
+1. Create a Logfire account at https://logfire.pydantic.dev
+2. Go to **Settings** → **API Keys** → Create a **Write Token**
+3. Add `LOGFIRE_TOKEN=your_token_here` to your `.env` file
+
+### What Gets Traced
+
+| Trace Type | What It Shows |
+|------------|---------------|
+| MCP Tool Calls | `list_projects`, `list_workpackages` — caller, duration, result |
+| HTTP Requests | `GET /api/v3/projects` — status code, latency, errors |
+| Errors | Any exceptions with full stack traces |
+| Lifespan | Server startup/shutdown events |
+
 ## Testing
 
 ```bash
@@ -180,4 +209,5 @@ WorkPackage uses `links: dict = Field(alias="_links")` instead of a model_valida
 - `httpx` — Async HTTP client
 - `pydantic` — Data validation
 - `pydantic-settings` — Environment-based configuration
+- `logfire` — Observability and tracing
 - `pytest` / `pytest-asyncio` — Testing
