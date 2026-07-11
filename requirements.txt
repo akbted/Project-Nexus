@@ -5,3 +5,4 @@ fastmcp
 pytest
 pytest-asyncio
 logfire
+logfire[httpx]
