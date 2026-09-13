@@ -1,6 +1,0 @@
-pydantic
-pydantic-settings
-httpx
-fastmcp
-pytest
-pytest-asyncio
