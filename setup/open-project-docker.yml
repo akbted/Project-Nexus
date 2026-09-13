@@ -1,0 +1,86 @@
+name: project-nexus-openprojectv1
+
+services:
+  workai-db:
+    image: postgres:16-alpine
+    ports: ["5432:5432"]
+    environment:
+      POSTGRES_USER: workai
+      POSTGRES_PASSWORD: workai
+      POSTGRES_DB: workai
+    volumes:
+      - workai-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U workai"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"   # REST + built-in dashboard at /dashboard
+      - "6334:6334"   # gRPC
+    volumes:
+      - qdrant-data:/qdrant/storage
+    restart: unless-stopped
+
+  litellm:
+    image: ghcr.io/berriai/litellm:v1.99.1  
+    ports: ["4000:4000"]
+    environment:
+      LITELLM_MASTER_KEY: admin@123
+      DATABASE_URL: postgresql://workai:workai@workai-db:5432/workai
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY}
+      LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY}
+      LANGFUSE_HOST: https://cloud.langfuse.com
+    volumes:
+      - ./litellm_config.yaml:/app/config.yaml
+    command: ["--config", "/app/config.yaml", "--port", "4000"]
+    depends_on:
+      workai-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    ports: ["5050:80"]
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin@123
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    depends_on:
+      workai-db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    ports: ["5540:5540"]
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+volumes:
+  workai-db-data:
+  redis-data:
+  qdrant-data:
+  mem0-data:
