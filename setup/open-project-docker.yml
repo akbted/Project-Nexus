@@ -83,4 +83,3 @@ volumes:
   workai-db-data:
   redis-data:
   qdrant-data:
-  mem0-data:
