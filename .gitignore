@@ -1,2 +1,4 @@
 .venv
 .env
+setup/silo-data
+__pycache__/

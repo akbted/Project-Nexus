@@ -28,8 +28,9 @@ class ProjectSettings:
         self.REDIS_URL = os.getenv("REDIS_URL", "")
         self.QDRANT_URL = os.getenv("QDRANT_URL", "")
 
-
+        self.MINIO_ENDPOINT = os.getenv("MINIO_ENDPOINT", "")
+        self.MINIO_ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY", "")
+        self.MINIO_SECRET_KEY = os.getenv("MINIO_SECRET_KEY", "")
 
 
 settings = ProjectSettings()
-
