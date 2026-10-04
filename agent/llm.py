@@ -39,7 +39,6 @@ class LLM:
             ]
         ).choices[0].message.content
 
-
 if __name__ == "__main__":
     # Example usage
     provider_config = {
